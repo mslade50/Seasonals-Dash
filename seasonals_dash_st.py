@@ -7,7 +7,8 @@ file_loc = "."
 charts = [x for x in os.listdir(file_loc) if x.lower().endswith((".jpg", ".jpeg", ".png"))]
 
 for x in charts:
-    st.image(x, output_format='PNG')
+    image_path = os.path.join(file_loc, x)
+    st.image(image_path, width=800,output_format='PNG')
 
 # for x in charts:
 # 	st.image(x,output_format='PNG')
