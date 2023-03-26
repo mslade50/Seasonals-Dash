@@ -2,21 +2,26 @@ import streamlit as st
 import os
 
 st.set_page_config(layout="wide")
-# col1, col2, col3 = st.columns(3)
-# file_loc=r'C:\Users\McKinley Slade\Dropbox\MS Docs\Work\Sublime_Misc\Dash_images'
-# charts=os.listdir(r'C:\Users\McKinley Slade\Dropbox\MS Docs\Work\Sublime_Misc\Dash_images')
 
-file_loc=r'C:\Users\Lenovo user\Dropbox\MS Docs\Work\Sublime_Misc\Dash_images'
-charts=os.listdir(r'C:\Users\Lenovo user\Dropbox\MS Docs\Work\Sublime_Misc\Dash_images')
+# Get the directory where the Streamlit app script is located
+script_dir = os.path.dirname(os.path.realpath(__file__))
 
+# Specify the subdirectory containing the images relative to the script directory
+image_dir = "Dash_images"
 
-# file_loc=r"C:\Users\McKinley\Dropbox\MS Docs\Work\Sublime_Misc\Dash_images\seasonals_dash_st.py"
-# charts=os.listdir(r'C:\Users\McKinley\Dropbox\MS Docs\Work\Sublime_Misc\Dash_images')
+# Get the full path to the image directory
+image_dir_path = os.path.join(script_dir)
 
-del charts[13]
+# Get a list of all image files in the directory
+image_files = os.listdir(image_dir_path)
 
-for x in charts:
-	st.image(x,output_format='PNG')
+# Loop over the image files and display them
+for image_file in image_files:
+    image_path = os.path.join(image_dir_path, image_file)
+    st.image(image_path, output_format='PNG')
+
+# for x in charts:
+# 	st.image(x,output_format='PNG')
 
 # with col1:	
 # 	for x in charts[0:9]:
