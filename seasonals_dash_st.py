@@ -3,8 +3,12 @@ import os
 
 st.set_page_config(layout="wide")
 # col1, col2, col3 = st.columns(3)
-file_loc=r'C:\Users\McKinley Slade\Dropbox\MS Docs\Work\Sublime_Misc\Dash_images'
-charts=os.listdir(r'C:\Users\McKinley Slade\Dropbox\MS Docs\Work\Sublime_Misc\Dash_images')
+# file_loc=r'C:\Users\McKinley Slade\Dropbox\MS Docs\Work\Sublime_Misc\Dash_images'
+# charts=os.listdir(r'C:\Users\McKinley Slade\Dropbox\MS Docs\Work\Sublime_Misc\Dash_images')
+
+file_loc=r'C:\Users\Lenovo user\Dropbox\MS Docs\Work\Sublime_Misc\Dash_images'
+charts=os.listdir(r'C:\Users\Lenovo user\Dropbox\MS Docs\Work\Sublime_Misc\Dash_images')
+
 
 # file_loc=r"C:\Users\McKinley\Dropbox\MS Docs\Work\Sublime_Misc\Dash_images\seasonals_dash_st.py"
 # charts=os.listdir(r'C:\Users\McKinley\Dropbox\MS Docs\Work\Sublime_Misc\Dash_images')
