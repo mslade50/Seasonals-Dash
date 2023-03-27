@@ -456,7 +456,7 @@ def seasonals_chart(tick):
 	    ),
 	    xaxis=dict(title='Date', color='black'),
 	    yaxis=dict(title='Mean Return', color='black'),
-	    font=dict(color='black'),
+	    font=dict(color='white'),
 	    margin=dict(l=40, r=40, t=40, b=40),
     	hovermode='x',
 	)
