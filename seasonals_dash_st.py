@@ -457,6 +457,8 @@ def seasonals_chart(tick):
 	    xaxis=dict(title='Date', color='white',showgrid=False),
 	    yaxis=dict(title='Mean Return', color='white',showgrid=False),
 	    font=dict(color='white'),
+		margin=dict(l=40, r=40, t=40, b=40),
+    		hovermode='x'
 	)
 
 	st.plotly_chart(fig)
