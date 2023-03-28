@@ -17,9 +17,10 @@ def seasonals_chart(tick):
 	adjust=0
 	plot_ytd="Yes"
 	all_=""
+	end_date=dt.datetime(2022,12,31)
 
 	spx1=yf.Ticker(ticker)
-	spx = spx1.history(period="max")
+	spx = spx1.history(period="max",end=end_date)
 
 	spx["log_return"] = np.log(spx["Close"] / spx["Close"].shift(1))*100
 
