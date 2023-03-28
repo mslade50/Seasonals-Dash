@@ -461,8 +461,8 @@ def seasonals_chart(tick):
 	    font=dict(color='white'),
 	    margin=dict(l=40, r=40, t=40, b=40),
 	    hovermode='x',
-	    plot_bgcolor='rgba(0,0,0,0)',
-	    paper_bgcolor='rgba(0,0,0,0)'
+	    plot_bgcolor='Black',
+	    paper_bgcolor='Black'
 	)
 
 	st.plotly_chart(fig)
