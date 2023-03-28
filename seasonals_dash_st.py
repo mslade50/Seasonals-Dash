@@ -429,11 +429,12 @@ def seasonals_chart(tick):
 	    fig.add_trace(go.Scatter(x=days2.index, y=days2['this_yr'], mode='lines', name='Year to Date', line=dict(color='green')))
 
 	y1 = max(s4.max(), days2['this_yr'].max()) if plot_ytd == 'Yes' else s4.max()
+	y0=min(s4.min(),days2['this_yr'].min()),0)
 
 	fig.add_shape(dict(
 	    type="line",
 	    x0=length,
-	    y0=0,
+	    y0=y0,
 	    x1=length,
 	    y1=y1,
 	    line=dict(
