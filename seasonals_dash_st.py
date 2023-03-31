@@ -409,7 +409,7 @@ def seasonals_chart(tick):
 	else:
 		ticker2 = ticker
 
-
+	length= len(days) + adjust
 	c=days.Close[-1]
 
 	dfm=pd.DataFrame(yr_mid_master)
@@ -430,6 +430,14 @@ def seasonals_chart(tick):
 
 	y1 = max(s4.max(), days2['this_yr'].max()) if plot_ytd == 'Yes' else s4.max()
 	y0=min(s4.min(),days2['this_yr'].min(),0)
+	# Assuming 'length' variable is defined and within the range of the x-axis
+	length_value = length
+
+	# Interpolate Y value at the specified X coordinate
+	y_value_at_length = np.interp(length_value, s4.index, s4.values)
+
+	# Add a white dot at the specified X coordinate and the interpolated Y value
+	fig.add_trace(go.Scatter(x=[length_value], y=[y_value_at_length], mode='markers', marker=dict(color='white', size=8), name='White Dot'))
 
 	fig.update_layout(
 	    title=f"Mean return path for {ticker2} in years {start}-present",
