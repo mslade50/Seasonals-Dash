@@ -437,7 +437,7 @@ def seasonals_chart(tick):
 	y_value_at_length = np.interp(length_value, s4.index, s4.values)
 
 	# Add a white dot at the specified X coordinate and the interpolated Y value
-	fig.add_trace(go.Scatter(x=[length_value], y=[y_value_at_length], mode='markers', marker=dict(color='white', size=8), name='White Dot'))
+	fig.add_trace(go.Scatter(x=[length_value], y=[y_value_at_length], mode='markers', marker=dict(color='white', size=8), name='White Dot' ,showlegend=False))
 
 	fig.update_layout(
 	    title=f"Mean return path for {ticker2} in years {start}-present",
