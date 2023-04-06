@@ -21,6 +21,21 @@ def seasonals_chart(tick):
 
 	spx1=yf.Ticker(ticker)
 	spx = spx1.history(period="max",end=end_date)
+	spx_rank=spx1.history(period="max")
+	# Calculate trailing 5-day returns
+	spx_rank['Trailing_5d_Returns'] = (spx_rank['Close'] / spx_rank['Close'].shift(5)) - 1
+
+	# Calculate trailing 21-day returns
+	spx_rank['Trailing_21d_Returns'] = (spx_rank['Close'] / spx_rank['Close'].shift(21)) - 1
+
+	# Calculate percentile ranks for trailing 5-day returns on a rolling 750-day window
+	spx_rank['Trailing_5d_percentile_rank'] = spx_rank['Trailing_5d_Returns'].rolling(window=750).apply(lambda x: pd.Series(x).rank(pct=True).iloc[-1])
+
+	# Calculate percentile ranks for trailing 21-day returns on a rolling 750-day window
+	spx_rank['Trailing_21d_percentile_rank'] = spx_rank['Trailing_21d_Returns'].rolling(window=750).apply(lambda x: pd.Series(x).rank(pct=True).iloc[-1])
+
+	dr21_rank=(spx_rank['Trailing_21d_percentile_rank'][-1]*100).round(2)
+	dr5_rank=(spx_rank['Trailing_5d_percentile_rank'][-1]*100).round(2)
 
 	spx["log_return"] = np.log(spx["Close"] / spx["Close"].shift(1))*100
 
@@ -338,7 +353,7 @@ def seasonals_chart(tick):
 
 	#5d stuff
 
-	new_df['Variance_rnk']=new_df.Fwd_mad5.rank(pct=True).round(3)*100
+	new_df['Variance_rnk']=new_df.Fwd_mad5.rolling(window=750).rank(pct=True).round(3)*100
 	new_df['Variance_rnk_MT']=new_df.Fwd_mad5_MT.rank(pct=True).round(3)*100
 	new_df['Returns_5_rnk']=new_df.Fwd_R5.rank(pct=True).round(3)*100
 	new_df['Returns_5_rnk_mt']=new_df.Fwd_R5_MT.rank(pct=True).round(3)*100
@@ -395,13 +410,10 @@ def seasonals_chart(tick):
 	all_21d=r_21_ptile.values[0]
 	mt_21d=r_21_ptile_mt.values[0]
 	all_avg=((all_5d+all_10d+all_21d)/3).round(2)
-	cycle_avg=true_cycle_rnk
-	total_avg=((all_avg+true_cycle_rnk)/2).round(2)
-	# print(f'''Fwd cycle rank is {true_cycle_rnk}
-	# Fwd cycle delta is {abs(true_cycle_rnk-trailing_cycle).round(2)}
-	# Fwd all rank is {all_avg}
-	# Fwd Avg rank is {total_avg}
-	# ''')
+	cycle_avg=true_cycle_rnk.round(1)
+	total_avg=((all_avg+true_cycle_rnk)/2).round(1) 
+	trailing_21_rank=dr21_rank.round(1)
+	trailing_5_rank=dr5_rank.round(1)
 
 
 	if ticker == '^GSPC':
@@ -414,9 +426,10 @@ def seasonals_chart(tick):
 
 	dfm=pd.DataFrame(yr_mid_master)
 	dfm1=dfm.mean()
+	upper=(np.std(dfm))*2+dfm1
+	lower=dfm1-(np.std(dfm))*2
+
 	s4=dfm1.cumsum()
-
-
 	dfy=pd.DataFrame(yr_master)
 	dfy1=dfy.mean()
 	s3=dfy1.cumsum()
@@ -438,7 +451,43 @@ def seasonals_chart(tick):
 
 	# Add a white dot at the specified X coordinate and the interpolated Y value
 	fig.add_trace(go.Scatter(x=[length_value], y=[y_value_at_length], mode='markers', marker=dict(color='white', size=8), name='White Dot' ,showlegend=False))
+	def text_color(value, reverse=False):
+	    if not reverse:
+	        if value >= 85:
+	            return 'green'
+	        elif value <= 15:
+	            return 'red'
+	        else:
+	            return 'white'
+	    else:
+	        if value >= 85:
+	            return 'red'
+	        elif value <= 15:
+	            return 'green'
+	        else:
+	            return 'white'
+	def create_annotation(x, y, text, color):
+	    return dict(
+	        x=x,
+	        y=y,
+	        xref='paper',
+	        yref='paper',
+	        text=text,
+	        showarrow=False,
+	        font=dict(size=12, color=color),
+	        bgcolor='rgba(0, 0, 0, 0.5)',
+	        bordercolor='grey',
+	        borderwidth=1,
+	        borderpad=4,
+	        align='left'
+	    )
 
+	annotations = [
+	    create_annotation(0.4, -0.22, f"Cycle Avg: {cycle_avg}", text_color(cycle_avg)),
+	    create_annotation(0.55, -0.22, f"Total Avg: {total_avg}", text_color(total_avg)),
+	    create_annotation(0.85, -0.22, f"Trailing 21 Rank: {trailing_21_rank}", text_color(trailing_21_rank, reverse=True)),
+	    create_annotation(1.04, -0.22, f"Trailing 5 Rank: {trailing_5_rank}", text_color(trailing_5_rank, reverse=True)),
+	]
 	fig.update_layout(
 	    title=f"Mean return path for {ticker2} in years {start}-present",
 	    legend=dict(
@@ -450,16 +499,18 @@ def seasonals_chart(tick):
 	        orientation='h',
 	        bordercolor='grey',
 	        borderwidth=1,
+	        x=-0.10,
+	        y=-0.135 
 	    ),
-	    xaxis=dict(title='Date', color='white',showgrid=False),
+	    xaxis=dict(title='', color='white',showgrid=False),
 	    yaxis=dict(title='Mean Return', color='white',showgrid=False),
 	    font=dict(color='white'),
-	    margin=dict(l=40, r=40, t=40, b=40),
+	    margin=dict(l=40, r=40, t=40, b=70),  # Increase bottom margin
 	    hovermode='x',
 	    plot_bgcolor='Black',
-	    paper_bgcolor='Black'
+	    paper_bgcolor='Black',
+	    annotations=annotations  # Use the new annotations list with colored text
 	)
-
 	st.plotly_chart(fig)
 
 megas_list=['AAPL','AMD','AMZN','GOOG','GS','HD','JPM','MSFT','NFLX','NKE','NVDA','TSLA','TSM','UNH','V','WMT','XOM','^DJI','^RUT','^NDX','QQQ',
