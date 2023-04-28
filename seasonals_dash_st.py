@@ -18,7 +18,7 @@ def seasonals_chart(tick):
 	plot_ytd="Yes"
 	all_=""
 	end_date=dt.datetime(2014,12,30)
-	this_yr_end=dt.datetime(2015,12,30)
+	this_yr_end=dt.datetime(2015,12,28)
 
 
 	spx1=yf.Ticker(ticker)
