@@ -13,7 +13,7 @@ def seasonals_chart(tick):
 	ticker=tick
 	cycle_start=1950
 	cycle_label='Midterms'
-	cycle_var='midterms'
+	cycle_var='pre_election'
 	adjust=0
 	plot_ytd="Yes"
 	all_=""
