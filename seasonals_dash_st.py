@@ -440,31 +440,69 @@ def seasonals_chart(tick):
 
 	# Add a white dot at the specified X coordinate and the interpolated Y value
 	fig.add_trace(go.Scatter(x=[length_value], y=[y_value_at_length], mode='markers', marker=dict(color='white', size=8), name='White Dot' ,showlegend=False))
+	def text_color(value, reverse=False):
+	    if not reverse:
+	        if value >= 85:
+	            return 'green'
+	        elif value <= 15:
+	            return 'red'
+	        else:
+	            return 'white'
+	    else:
+	        if value >= 85:
+	            return 'red'
+	        elif value <= 15:
+	            return 'green'
+	        else:
+	            return 'white'
 
+	def create_annotation(x, y, text, color):
+	    return dict(
+		x=x,
+		y=y,
+		xref='paper',
+		yref='paper',
+		text=text,
+		showarrow=False,
+		font=dict(size=12, color=color),
+		bgcolor='rgba(0, 0, 0, 0.5)',
+		bordercolor='grey',
+		borderwidth=1,
+		borderpad=4,
+		align='left'
+	    )
+
+	annotations = [
+	    create_annotation(0.4, -0.22, f"Cycle Avg: {cycle_avg}", text_color(cycle_avg)),
+	    create_annotation(0.55, -0.22, f"Total Avg: {total_avg}", text_color(total_avg)),
+	    create_annotation(0.85, -0.22, f"Trailing 21 Rank: {trailing_21_rank}", text_color(trailing_21_rank, reverse=True)),
+	    create_annotation(1.04, -0.22, f"Trailing 5 Rank: {trailing_5_rank}", text_color(trailing_5_rank, reverse=True)),
+	]
 	fig.update_layout(
 	    title=f"Mean return path for {ticker2} in years {start}-present",
 	    legend=dict(
-	        bgcolor='rgba(0,0,0,0)',
-	        font=dict(color='White'),
-	        itemclick='toggleothers',
-	        itemdoubleclick='toggle',
-	        traceorder='reversed',
-	        orientation='h',
-	        bordercolor='grey',
-	        borderwidth=1,
+		bgcolor='rgba(0,0,0,0)',
+		font=dict(color='White'),
+		itemclick='toggleothers',
+		itemdoubleclick='toggle',
+		traceorder='reversed',
+		orientation='h',
+		bordercolor='grey',
+		borderwidth=1,
+		x=-0.10,
+		y=-0.135 
 	    ),
-	    xaxis=dict(title='Date', color='white',showgrid=False),
+	    xaxis=dict(title='', color='white',showgrid=False),
 	    yaxis=dict(title='Mean Return', color='white',showgrid=False),
 	    font=dict(color='white'),
-	    margin=dict(l=40, r=40, t=40, b=40),
+	    margin=dict(l=40, r=40, t=40, b=70),  # Increase bottom margin
 	    hovermode='x',
 	    plot_bgcolor='Black',
-	    paper_bgcolor='Black'
+	    paper_bgcolor='Black',
+	    annotations=annotations  # Use the new annotations list with colored text
 	)
-
 	st.plotly_chart(fig)
 
-megas_list=['AAPL','AMD','AMZN','GOOG','GS','HD','JPM','MSFT','NFLX','NKE','NVDA','TSLA','TSM','UNH','V','WMT','XOM','^DJI','^RUT','^NDX','QQQ',
-'^GSPC','SPY','^SOX','^IXIC','^RUO','GC=F','SI=F','CL=F','ZW=F','NG=F','^VIX','DX-Y.NYB','EURUSD=X','GBPUSD=X','USDJPY=X','USDCHF=X']
+megas_list=['JPM']
 for stock in megas_list:
 	seasonals_chart(stock)
