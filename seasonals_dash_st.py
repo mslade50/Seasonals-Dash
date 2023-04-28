@@ -18,7 +18,7 @@ def seasonals_chart(tick):
 	plot_ytd="Yes"
 	all_=""
 	end_date=dt.datetime(2022,12,30)
-	this_yr_end=dt.datetime(2023,4,2)
+	this_yr_end=dt.datetime(2023,3,10)
 
 	spx1=yf.Ticker(ticker)
 	spx = spx1.history(period="max",end=end_date)
@@ -514,7 +514,7 @@ def seasonals_chart(tick):
 	)
 	st.plotly_chart(fig)
 
-positions=['JPM']
+positions=['^SOX']
 positions.sort()
 for stock in positions:
 	seasonals_chart(stock)
