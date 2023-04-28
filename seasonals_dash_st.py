@@ -11,14 +11,14 @@ import plotly.graph_objs as go
 
 def seasonals_chart(tick):
 	ticker=tick
-	cycle_start=1950
+	cycle_start=1949
 	cycle_label='Midterms'
 	cycle_var='pre_election'
 	adjust=0
 	plot_ytd="Yes"
 	all_=""
-	end_date=dt.datetime(2021,12,30)
-	this_yr_end=dt.datetime(2022,10,13)
+	end_date=dt.datetime(2016,12,30)
+	this_yr_end=dt.datetime(2017,4,13)
 
 	spx1=yf.Ticker(ticker)
 	spx = spx1.history(period="max",end=end_date)
