@@ -18,6 +18,8 @@ def seasonals_chart(tick):
 	plot_ytd="Yes"
 	all_=""
 	end_date=dt.datetime(2022,12,30)
+	this_year_end=dt.datetime(2023,4,2)
+
 
 	spx1=yf.Ticker(ticker)
 	spx = spx1.history(period="max",end=end_date)
@@ -34,7 +36,7 @@ def seasonals_chart(tick):
 
 	#second dataframe explicity to count the number of trading days so far this year
 	now = dt.datetime.now()+timedelta(days=1)
-	days = yf.download(ticker, start="2022-12-31", end=now)
+	days = yf.download(ticker, start="2022-12-31", end=this_yr_end)
 	days["log_return"] = np.log(days["Close"] / days["Close"].shift(1))*100
 	days['day_of_year'] = days.index.day_of_year
 	days['this_yr']=days.log_return.cumsum()
