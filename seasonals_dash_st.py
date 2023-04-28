@@ -18,11 +18,25 @@ def seasonals_chart(tick):
 	plot_ytd="Yes"
 	all_=""
 	end_date=dt.datetime(2022,12,30)
-	this_year_end=dt.datetime(2023,4,2)
-
+	this_yr_end=dt.datetime(2023,4,2)
 
 	spx1=yf.Ticker(ticker)
 	spx = spx1.history(period="max",end=end_date)
+	spx_rank=spx1.history(period="max")
+	# Calculate trailing 5-day returns
+	spx_rank['Trailing_5d_Returns'] = (spx_rank['Close'] / spx_rank['Close'].shift(5)) - 1
+
+	# Calculate trailing 21-day returns
+	spx_rank['Trailing_21d_Returns'] = (spx_rank['Close'] / spx_rank['Close'].shift(21)) - 1
+
+	# Calculate percentile ranks for trailing 5-day returns on a rolling 750-day window
+	spx_rank['Trailing_5d_percentile_rank'] = spx_rank['Trailing_5d_Returns'].rolling(window=750).apply(lambda x: pd.Series(x).rank(pct=True).iloc[-1])
+
+	# Calculate percentile ranks for trailing 21-day returns on a rolling 750-day window
+	spx_rank['Trailing_21d_percentile_rank'] = spx_rank['Trailing_21d_Returns'].rolling(window=750).apply(lambda x: pd.Series(x).rank(pct=True).iloc[-1])
+
+	dr21_rank=(spx_rank['Trailing_21d_percentile_rank'][-1]*100).round(2)
+	dr5_rank=(spx_rank['Trailing_5d_percentile_rank'][-1]*100).round(2)
 
 	spx["log_return"] = np.log(spx["Close"] / spx["Close"].shift(1))*100
 
@@ -36,7 +50,7 @@ def seasonals_chart(tick):
 
 	#second dataframe explicity to count the number of trading days so far this year
 	now = dt.datetime.now()+timedelta(days=1)
-	days = yf.download(ticker, start="2022-12-31", end=this_year_end)
+	days = yf.download(ticker, start="2022-12-31", end=this_yr_end)
 	days["log_return"] = np.log(days["Close"] / days["Close"].shift(1))*100
 	days['day_of_year'] = days.index.day_of_year
 	days['this_yr']=days.log_return.cumsum()
@@ -335,7 +349,7 @@ def seasonals_chart(tick):
 															0:'Fwd_R5',1:'Fwd_R5_MT',2:'Fwd_mad5',3:'Fwd_mad5_MT',
 															4:'Fwd_R10',5:'Fwd_R10_MT',6:'Fwd_mad10',7:'Fwd_mad10_MT',
 															8:'Fwd_R21',9:'Fwd_R21_MT',10:'Fwd_mad21',11:'Fwd_mad21_MT',
-															
+
 	})
 
 	#5d stuff
@@ -397,13 +411,10 @@ def seasonals_chart(tick):
 	all_21d=r_21_ptile.values[0]
 	mt_21d=r_21_ptile_mt.values[0]
 	all_avg=((all_5d+all_10d+all_21d)/3).round(2)
-	cycle_avg=true_cycle_rnk
-	total_avg=((all_avg+true_cycle_rnk)/2).round(2)
-	# print(f'''Fwd cycle rank is {true_cycle_rnk}
-	# Fwd cycle delta is {abs(true_cycle_rnk-trailing_cycle).round(2)}
-	# Fwd all rank is {all_avg}
-	# Fwd Avg rank is {total_avg}
-	# ''')
+	cycle_avg=true_cycle_rnk.round(1)
+	total_avg=((all_avg+true_cycle_rnk)/2).round(1) 
+	trailing_21_rank=dr21_rank.round(1)
+	trailing_5_rank=dr5_rank.round(1)
 
 
 	if ticker == '^GSPC':
@@ -416,9 +427,10 @@ def seasonals_chart(tick):
 
 	dfm=pd.DataFrame(yr_mid_master)
 	dfm1=dfm.mean()
+	upper=(np.std(dfm))*2+dfm1
+	lower=dfm1-(np.std(dfm))*2
+
 	s4=dfm1.cumsum()
-
-
 	dfy=pd.DataFrame(yr_master)
 	dfy1=dfy.mean()
 	s3=dfy1.cumsum()
@@ -455,7 +467,6 @@ def seasonals_chart(tick):
 	            return 'green'
 	        else:
 	            return 'white'
-
 	def create_annotation(x, y, text, color):
 	    return dict(
 		x=x,
@@ -503,6 +514,8 @@ def seasonals_chart(tick):
 	)
 	st.plotly_chart(fig)
 
-megas_list=['JPM']
-for stock in megas_list:
+positions=['JPM']
+positions.sort()
+for stock in positions:
 	seasonals_chart(stock)
+
