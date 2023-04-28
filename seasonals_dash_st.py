@@ -36,7 +36,7 @@ def seasonals_chart(tick):
 
 	#second dataframe explicity to count the number of trading days so far this year
 	now = dt.datetime.now()+timedelta(days=1)
-	days = yf.download(ticker, start="2022-12-31", end=this_yr_end)
+	days = yf.download(ticker, start="2022-12-31", end=this_year_end)
 	days["log_return"] = np.log(days["Close"] / days["Close"].shift(1))*100
 	days['day_of_year'] = days.index.day_of_year
 	days['this_yr']=days.log_return.cumsum()
