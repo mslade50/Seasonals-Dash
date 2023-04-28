@@ -11,7 +11,7 @@ import plotly.graph_objs as go
 
 def seasonals_chart(tick):
 	ticker=tick
-	cycle_start=1951
+	cycle_start=1950
 	cycle_label='Third Year of Cycle'
 	cycle_var='midterms'
 	adjust=0
