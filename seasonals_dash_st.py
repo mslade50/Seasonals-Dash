@@ -514,7 +514,7 @@ def seasonals_chart(tick):
 	)
 	st.plotly_chart(fig)
 
-positions=['^SOX']
+positions=['CL=F']
 positions.sort()
 for stock in positions:
 	seasonals_chart(stock)
