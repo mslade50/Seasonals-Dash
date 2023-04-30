@@ -454,8 +454,9 @@ def seasonals_chart(tick):
 	# Add a white dot at the specified X coordinate and the interpolated Y value
 	fig.add_trace(go.Scatter(x=[length_value], y=[y_value_at_length], mode='markers', marker=dict(color='white', size=8), name='White Dot' ,showlegend=False))
 	# Calculate R-squared
-	x = s4.index.values.astype(float)
-	y = s4.values.astype(float)
+	# Assuming s4 and days2['this_yr'] are defined as Pandas Series objects
+	x = np.concatenate((s4.index, days2.index))
+	y = np.concatenate((s4.values, days2['this_yr'].values))
 	coefficients = np.polyfit(x, y, deg=1)
 	p = np.poly1d(coefficients)
 	y_fit = p(x)
