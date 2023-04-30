@@ -9,7 +9,6 @@ import pandas as pd
 import streamlit as st
 import plotly.graph_objs as go
 
-
 def seasonals_chart(tick):
 	ticker=tick
 	cycle_start=1951
@@ -446,7 +445,6 @@ def seasonals_chart(tick):
 
 	y1 = max(s4.max(), days2['this_yr'].max()) if plot_ytd == 'Yes' else s4.max()
 	y0=min(s4.min(),days2['this_yr'].min(),0)
-
 	# Assuming 'length' variable is defined and within the range of the x-axis
 	length_value = length
 
@@ -455,34 +453,21 @@ def seasonals_chart(tick):
 
 	# Add a white dot at the specified X coordinate and the interpolated Y value
 	fig.add_trace(go.Scatter(x=[length_value], y=[y_value_at_length], mode='markers', marker=dict(color='white', size=8), name='White Dot' ,showlegend=False))
-
-	# Calculate R-squared
-	x = s4.index.values.astype(float)
-	y = s4.values.astype(float)
-	coefficients = np.polyfit(x, y, deg=1)
-	p = np.poly1d(coefficients)
-	y_fit = p(x)
-	y_mean = np.mean(y)
-	ss_tot = np.sum((y - y_mean) ** 2)
-	ss_res = np.sum((y - y_fit) ** 2)
-	r_squared = round(1 - (ss_res / ss_tot), 2)
-
 	def text_color(value, reverse=False):
 	    if not reverse:
-		if value >= 85:
-		    return 'green'
-		elif value <= 15:
-		    return 'red'
-		else:
-		    return 'white'
+	        if value >= 85:
+	            return 'green'
+	        elif value <= 15:
+	            return 'red'
+	        else:
+	            return 'white'
 	    else:
-		if value >= 85:
-		    return 'red'
-		elif value <= 15:
-		    return 'green'
-		else:
-		    return 'white'
-
+	        if value >= 85:
+	            return 'red'
+	        elif value <= 15:
+	            return 'green'
+	        else:
+	            return 'white'
 	def create_annotation(x, y, text, color):
 	    return dict(
 		x=x,
@@ -504,17 +489,30 @@ def seasonals_chart(tick):
 	    create_annotation(0.55, -0.22, f"Total Avg: {total_avg}", text_color(total_avg)),
 	    create_annotation(0.85, -0.22, f"Trailing 21 Rank: {trailing_21_rank}", text_color(trailing_21_rank, reverse=True)),
 	    create_annotation(1.04, -0.22, f"Trailing 5 Rank: {trailing_5_rank}", text_color(trailing_5_rank, reverse=True)),
-	    create_annotation(0.9, 1.12, f"R-squared: {r_squared}", 'white') # Add R-squared annotation
 	]
-
 	fig.update_layout(
 	    title=f"Mean return path for {ticker2} in years {start}-present",
 	    legend=dict(
 		bgcolor='rgba(0,0,0,0)',
 		font=dict(color='White'),
 		itemclick='toggleothers',
-		itemdoubleclick='
-
+		itemdoubleclick='toggle',
+		traceorder='reversed',
+		orientation='h',
+		bordercolor='grey',
+		borderwidth=1,
+		x=-0.10,
+		y=-0.135 
+	    ),
+	    xaxis=dict(title='', color='white',showgrid=False),
+	    yaxis=dict(title='Mean Return', color='white',showgrid=False),
+	    font=dict(color='white'),
+	    margin=dict(l=40, r=40, t=40, b=70),  # Increase bottom margin
+	    hovermode='x',
+	    plot_bgcolor='Black',
+	    paper_bgcolor='Black',
+	    annotations=annotations  # Use the new annotations list with colored text
+	)
 	st.plotly_chart(fig)
 
 positions=['^GSPC','SPY']
