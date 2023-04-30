@@ -446,6 +446,7 @@ def seasonals_chart(tick):
 
 	y1 = max(s4.max(), days2['this_yr'].max()) if plot_ytd == 'Yes' else s4.max()
 	y0=min(s4.min(),days2['this_yr'].min(),0)
+
 	# Assuming 'length' variable is defined and within the range of the x-axis
 	length_value = length
 
@@ -481,20 +482,21 @@ def seasonals_chart(tick):
 		    return 'green'
 		else:
 		    return 'white'
+
 	def create_annotation(x, y, text, color):
 	    return dict(
-	    x=x,
-	    y=y,
-	    xref='paper',
-	    yref='paper',
-	    text=text,
-	    showarrow=False,
-	    font=dict(size=12, color=color),
-	    bgcolor='rgba(0, 0, 0, 0.5)',
-	    bordercolor='grey',
-	    borderwidth=1,
-	    borderpad=4,
-	    align='left'
+		x=x,
+		y=y,
+		xref='paper',
+		yref='paper',
+		text=text,
+		showarrow=False,
+		font=dict(size=12, color=color),
+		bgcolor='rgba(0, 0, 0, 0.5)',
+		bordercolor='grey',
+		borderwidth=1,
+		borderpad=4,
+		align='left'
 	    )
 
 	annotations = [
@@ -504,10 +506,14 @@ def seasonals_chart(tick):
 	    create_annotation(1.04, -0.22, f"Trailing 5 Rank: {trailing_5_rank}", text_color(trailing_5_rank, reverse=True)),
 	    create_annotation(0.9, 1.12, f"R-squared: {r_squared}", 'white') # Add R-squared annotation
 	]
+
 	fig.update_layout(
 	    title=f"Mean return path for {ticker2} in years {start}-present",
 	    legend=dict(
-	    bgcolor='rgba(
+		bgcolor='rgba(0,0,0,0)',
+		font=dict(color='White'),
+		itemclick='toggleothers',
+		itemdoubleclick='
 
 	st.plotly_chart(fig)
 
