@@ -11,9 +11,9 @@ import plotly.graph_objs as go
 
 def seasonals_chart(tick):
 	ticker=tick
-	cycle_start=1950
+	cycle_start=1951
 	cycle_label='Midterms'
-	cycle_var='post_election'
+	cycle_var='pre_election'
 	adjust=0
 	plot_ytd="Yes"
 	all_=""
@@ -303,10 +303,10 @@ def seasonals_chart(tick):
 	post_election=[]
 	midterms=[]
 
-	midterms_list=[df_mt_5d_mean,df_mt_10d_mean,df_mt_21d_mean]
-	pre_election_list=[df_mt2_5d_mean,df_mt2_10d_mean,df_mt2_21d_mean]
-	election_list=[df_mt3_5d_mean,df_mt3_10d_mean,df_mt3_21d_mean]
-	post_election_list=[df_mt4_5d_mean,df_mt4_10d_mean,df_mt4_21d_mean]
+	pre_election_list=[df_mt_5d_mean,df_mt_10d_mean,df_mt_21d_mean]
+	election_list=[df_mt2_5d_mean,df_mt2_10d_mean,df_mt2_21d_mean]
+	post_election_list=[df_mt3_5d_mean,df_mt3_10d_mean,df_mt3_21d_mean]
+	midterms_list=[df_mt4_5d_mean,df_mt4_10d_mean,df_mt4_21d_mean]
 
 	for g in pre_election_list:
 		pre_election.append(g)
