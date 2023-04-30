@@ -8,6 +8,7 @@ import yfinance as yf
 import pandas as pd
 import streamlit as st
 import plotly.graph_objs as go
+from scipy.stats import lineregress
 
 def seasonals_chart(tick):
 	ticker=tick
