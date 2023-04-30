@@ -450,6 +450,12 @@ def seasonals_chart(tick):
 
 	# Interpolate Y value at the specified X coordinate
 	y_value_at_length = np.interp(length_value, s4.index, s4.values)
+	
+	# Calculate R-squared
+	x = s4.index.values.astype(float)
+	y = s4.values.astype(float)
+	slope, intercept, r_value, p_value, std_err = linregress(x, y)
+	r_squared = round(r_value ** 2, 2)
 
 	# Add a white dot at the specified X coordinate and the interpolated Y value
 	fig.add_trace(go.Scatter(x=[length_value], y=[y_value_at_length], mode='markers', marker=dict(color='white', size=8), name='White Dot' ,showlegend=False))
@@ -491,7 +497,7 @@ def seasonals_chart(tick):
 	    create_annotation(1.04, -0.22, f"Trailing 5 Rank: {trailing_5_rank}", text_color(trailing_5_rank, reverse=True)),
 	]
 	fig.update_layout(
-	    title=f"Mean return path for {ticker2} in years {start}-present",
+	    title=f"Mean return path for {ticker2} in years {start}-present (R-squared: {r_squared})",
 	    legend=dict(
 		bgcolor='rgba(0,0,0,0)',
 		font=dict(color='White'),
