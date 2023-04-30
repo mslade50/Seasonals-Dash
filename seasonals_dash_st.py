@@ -11,14 +11,14 @@ import plotly.graph_objs as go
 
 def seasonals_chart(tick):
 	ticker=tick
-	cycle_start=1951
+	cycle_start=1953
 	cycle_label='Midterms'
 	cycle_var='pre_election'
 	adjust=0
 	plot_ytd="Yes"
 	all_=""
-	end_date=dt.datetime(2022,12,30)
-	this_yr_end=dt.datetime(2023,4,28)
+	end_date=dt.datetime(2012,12,30)
+	this_yr_end=dt.datetime(2013,7,3)
 
 
 	spx1=yf.Ticker(ticker)
@@ -453,17 +453,6 @@ def seasonals_chart(tick):
 
 	# Add a white dot at the specified X coordinate and the interpolated Y value
 	fig.add_trace(go.Scatter(x=[length_value], y=[y_value_at_length], mode='markers', marker=dict(color='white', size=8), name='White Dot' ,showlegend=False))
-	# Calculate R-squared
-	# Assuming s4 and days2['this_yr'] are defined as Pandas Series objects
-	x = np.concatenate((s4.index, days2.index))
-	y = np.concatenate((s4.values, days2['this_yr'].values))
-	coefficients = np.polyfit(x, y, deg=1)
-	p = np.poly1d(coefficients)
-	y_fit = p(x)
-	y_mean = np.mean(y)
-	ss_tot = np.sum((y - y_mean) ** 2)
-	ss_res = np.sum((y - y_fit) ** 2)
-	r_squared = round(1 - (ss_res / ss_tot), 2)
 	def text_color(value, reverse=False):
 	    if not reverse:
 	        if value >= 85:
@@ -500,7 +489,6 @@ def seasonals_chart(tick):
 	    create_annotation(0.55, -0.22, f"Total Avg: {total_avg}", text_color(total_avg)),
 	    create_annotation(0.85, -0.22, f"Trailing 21 Rank: {trailing_21_rank}", text_color(trailing_21_rank, reverse=True)),
 	    create_annotation(1.04, -0.22, f"Trailing 5 Rank: {trailing_5_rank}", text_color(trailing_5_rank, reverse=True)),
-	    create_annotation(0.9, 1.12, f"R-squared: {r_squared}", 'white') # Add R-squared annotation
 	]
 	fig.update_layout(
 	    title=f"Mean return path for {ticker2} in years {start}-present",
@@ -531,4 +519,3 @@ positions=['^GSPC','SPY']
 positions.sort()
 for stock in positions:
 	seasonals_chart(stock)
-
