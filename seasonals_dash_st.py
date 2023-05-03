@@ -454,10 +454,6 @@ def seasonals_chart(tick):
 	correlation_matrix = np.corrcoef(s4.index[:length], days2['this_yr'][:length])
 	r_squared = correlation_matrix[0, 1] ** 2
 
-	annotations.append(
-	    create_annotation(0.98, 1.08, f"R-squared: {r_squared:.3f}", 'white')
-	)
-
 	# Add a white dot at the specified X coordinate and the interpolated Y value
 	fig.add_trace(go.Scatter(x=[length_value], y=[y_value_at_length], mode='markers', marker=dict(color='white', size=8), name='White Dot' ,showlegend=False))
 	def text_color(value, reverse=False):
@@ -497,6 +493,9 @@ def seasonals_chart(tick):
 	    create_annotation(0.85, -0.22, f"Trailing 21 Rank: {trailing_21_rank}", text_color(trailing_21_rank, reverse=True)),
 	    create_annotation(1.04, -0.22, f"Trailing 5 Rank: {trailing_5_rank}", text_color(trailing_5_rank, reverse=True)),
 	]
+	annotations.append(
+	    create_annotation(0.98, 1.08, f"R-squared: {r_squared:.3f}", 'white')
+	)
 	fig.update_layout(
 	    title=f"Mean return path for {ticker2} in years {start}-present",
 	    legend=dict(
