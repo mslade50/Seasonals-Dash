@@ -510,7 +510,7 @@ def seasonals_chart(tick):
 	    create_annotation(1.04, -0.22, f"Trailing 5 Rank: {trailing_5_rank}", text_color(trailing_5_rank, reverse=True)),
 	]
 	annotations.append(
-		create_annotation(1.0, 1.08, f"CC: {correlation_coefficient}", 'white')
+		create_annotation(1.04, 1.08, f"CC: {correlation_coefficient}", 'white')
 	)
 	annotations.append(
 		create_annotation(0.92, 1.08, f"Concordance: {sign_agreement_value}", 'white')
