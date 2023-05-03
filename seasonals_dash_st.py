@@ -466,7 +466,7 @@ def seasonals_chart(tick):
 
 	# Calculate daily changes for both series
 	s4_daily_changes = np.diff(s4_values)
-	this_year_daily_changes = np.diff(this_year_values)
+	this_year_daily_changes = np.diff(this_year_values).round(2)
 	# Calculate sign agreement between daily changes
 	sign_agreement_value = sign_agreement(s4_daily_changes, this_year_daily_changes)
 	
