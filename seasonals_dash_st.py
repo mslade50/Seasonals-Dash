@@ -505,6 +505,8 @@ def seasonals_chart(tick):
 	]
 	annotations.append(
 		create_annotation(0.98, 1.08, f"Correlation: {correlation_coefficient}", 'white')
+	)
+	annotations.append(
 		create_annotation(0.98, 1.0, f"Sign Agreement: {sign_agreement_value}", 'white')
 	)
 	fig.update_layout(
