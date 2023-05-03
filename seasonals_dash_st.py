@@ -471,9 +471,9 @@ def seasonals_chart(tick):
 	this_year_values = np.where(np.isnan(this_year_values), np.nanmean(this_year_values), this_year_values)
 
 	# Calculate sign agreement for 5-day, 10-day, and 21-day forward changes
-	sign_agreement_5d = sign_agreement(s4_values, this_year_values, window=5)
-	sign_agreement_10d = sign_agreement(s4_values, this_year_values, window=10)
-	sign_agreement_21d = sign_agreement(s4_values, this_year_values, window=21)
+	sign_agreement_5d = sign_agreement(s4_values, this_year_values, window=5).round(2)
+	sign_agreement_10d = sign_agreement(s4_values, this_year_values, window=10).round(2)
+	sign_agreement_21d = sign_agreement(s4_values, this_year_values, window=21).round(2)
 	# Add a white dot at the specified X coordinate and the interpolated Y value
 	fig.add_trace(go.Scatter(x=[length_value], y=[y_value_at_length], mode='markers', marker=dict(color='white', size=8), name='White Dot' ,showlegend=False))
 	def text_color(value, reverse=False):
