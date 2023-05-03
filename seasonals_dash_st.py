@@ -420,7 +420,7 @@ def seasonals_chart(tick):
 
 
 	if ticker == '^GSPC':
-		ticker2 = 'SPX'
+		ticker2 = 'SPXl'
 	else:
 		ticker2 = ticker
 
