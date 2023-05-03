@@ -461,15 +461,19 @@ def seasonals_chart(tick):
 	    correlation_matrix = np.corrcoef(s4_values, this_year_values)
 	    correlation_coefficient = correlation_matrix[0, 1]
 	    correlation_coefficient = f"{correlation_coefficient:.2f}"
-	def sign_agreement(a, b):
-		return np.mean(np.sign(a) == np.sign(b))
+	def sign_agreement(a, b, window):
+	    a_changes = a[window:] - a[:-window]
+	    b_changes = b[window:] - b[:-window]
+	    return np.mean(np.sign(a_changes) == np.sign(b_changes))
 
-	# Calculate daily changes for both series
-	s4_daily_changes = np.diff(s4_values)
-	this_year_daily_changes = np.diff(this_year_values)
-	# Calculate sign agreement between daily changes
-	sign_agreement_value = sign_agreement(s4_daily_changes, this_year_daily_changes).round(2)
-	
+	s4_values = s4.values[:length]
+	this_year_values = days2['this_yr'][:length]
+	this_year_values = np.where(np.isnan(this_year_values), np.nanmean(this_year_values), this_year_values)
+
+	# Calculate sign agreement for 5-day, 10-day, and 21-day forward changes
+	sign_agreement_5d = sign_agreement(s4_values, this_year_values, window=5)
+	sign_agreement_10d = sign_agreement(s4_values, this_year_values, window=10)
+	sign_agreement_21d = sign_agreement(s4_values, this_year_values, window=21)
 	# Add a white dot at the specified X coordinate and the interpolated Y value
 	fig.add_trace(go.Scatter(x=[length_value], y=[y_value_at_length], mode='markers', marker=dict(color='white', size=8), name='White Dot' ,showlegend=False))
 	def text_color(value, reverse=False):
@@ -513,7 +517,7 @@ def seasonals_chart(tick):
 		create_annotation(1.04, 1.08, f"CC: {correlation_coefficient}", 'white')
 	)
 	annotations.append(
-		create_annotation(0.92, 1.08, f"Concordance: {sign_agreement_value}", 'white')
+		create_annotation(0.92, 1.08, f"Concordance: {sign_agreement_5d,sign_agreement_10d,sign_agreement_21d}", 'white')
 	)
 	fig.update_layout(
 	    title=f"Mean return path for {ticker2} in years {start}-present",
