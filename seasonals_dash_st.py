@@ -475,10 +475,10 @@ def seasonals_chart(tick):
 
 	    if np.isnan(window_s4).any() or np.isnan(window_this_year).any() or np.var(window_s4) == 0 or np.var(window_this_year) == 0:
 		correlations.append(np.nan)
-	    else:
-		correlation_matrix = np.corrcoef(window_s4, window_this_year)
-		correlation_coefficient = correlation_matrix[0, 1]
-		correlations.append(correlation_coefficient)
+		else:
+			correlation_matrix = np.corrcoef(window_s4, window_this_year)
+			correlation_coefficient = correlation_matrix[0, 1]
+			correlations.append(correlation_coefficient)
 
 	average_correlation = pd.Series(correlations).mean()
 	average_correlation = f"{average_correlation:.2f}"
