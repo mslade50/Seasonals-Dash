@@ -515,7 +515,7 @@ def seasonals_chart(tick):
 	    create_annotation(1.04, -0.22, f"Trailing 5 Rank: {trailing_5_rank}", text_color(trailing_5_rank, reverse=True)),
 	]
 	annotations.append(
-		create_annotation(0.95, 1.08, f"Concordance 5,10,21: {sign_agreement_1d,sign_agreement_5d,sign_agreement_10d,sign_agreement_21d}", 'white')
+		create_annotation(0.99, 1.08, f"Concordance 5,10,21: {sign_agreement_1d,sign_agreement_5d,sign_agreement_10d,sign_agreement_21d}", 'white')
 	)
 	fig.update_layout(
 	    title=f"Mean return path for {ticker2} in years {start}-present",
