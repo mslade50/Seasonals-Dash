@@ -471,6 +471,7 @@ def seasonals_chart(tick):
 	this_year_values = np.where(np.isnan(this_year_values), np.nanmean(this_year_values), this_year_values)
 
 	# Calculate sign agreement for 5-day, 10-day, and 21-day forward changes
+	sign_agreement_1d = sign_agreement(s4_values, this_year_values, window=1).round(2)
 	sign_agreement_5d = sign_agreement(s4_values, this_year_values, window=5).round(2)
 	sign_agreement_10d = sign_agreement(s4_values, this_year_values, window=10).round(2)
 	sign_agreement_21d = sign_agreement(s4_values, this_year_values, window=21).round(2)
@@ -514,10 +515,7 @@ def seasonals_chart(tick):
 	    create_annotation(1.04, -0.22, f"Trailing 5 Rank: {trailing_5_rank}", text_color(trailing_5_rank, reverse=True)),
 	]
 	annotations.append(
-		create_annotation(1.04, 1.08, f"CC: {correlation_coefficient}", 'white')
-	)
-	annotations.append(
-		create_annotation(0.92, 1.08, f"Concordance 5,10,21: {sign_agreement_5d,sign_agreement_10d,sign_agreement_21d}", 'white')
+		create_annotation(0.92, 1.08, f"Concordance 5,10,21: {sign_agreement_1d,sign_agreement_5d,sign_agreement_10d,sign_agreement_21d}", 'white')
 	)
 	fig.update_layout(
 	    title=f"Mean return path for {ticker2} in years {start}-present",
