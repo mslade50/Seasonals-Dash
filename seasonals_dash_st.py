@@ -450,6 +450,12 @@ def seasonals_chart(tick):
 
 	# Interpolate Y value at the specified X coordinate
 	y_value_at_length = np.interp(length_value, s4.index, s4.values)
+	slope, intercept, r_value, p_value, std_err = stats.linregress(s4.index[:length], days2['this_yr'][:length])
+	r_squared = r_value ** 2
+
+	annotations.append(
+	    create_annotation(0.98, 1.08, f"R-squared: {r_squared:.3f}", 'white')
+	)
 
 	# Add a white dot at the specified X coordinate and the interpolated Y value
 	fig.add_trace(go.Scatter(x=[length_value], y=[y_value_at_length], mode='markers', marker=dict(color='white', size=8), name='White Dot' ,showlegend=False))
