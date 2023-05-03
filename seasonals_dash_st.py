@@ -507,7 +507,7 @@ def seasonals_chart(tick):
 		create_annotation(1.0, 1.08, f"CC: {correlation_coefficient}", 'white')
 	)
 	annotations.append(
-		create_annotation(0.88, 1.08, f"Sign Agreement: {sign_agreement_value}", 'white')
+		create_annotation(0.92, 1.08, f"Concordance: {sign_agreement_value}", 'white')
 	)
 	fig.update_layout(
 	    title=f"Mean return path for {ticker2} in years {start}-present",
