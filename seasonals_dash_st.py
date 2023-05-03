@@ -460,7 +460,7 @@ def seasonals_chart(tick):
 	else:
 	    correlation_matrix = np.corrcoef(s4_values, this_year_values)
 	    correlation_coefficient = correlation_matrix[0, 1]
-	    correlation_coefficient = f"{correlation_coefficient:.3f}"
+	    correlation_coefficient = f"{correlation_coefficient:.2f}"
 	def sign_agreement(a, b):
 		return np.mean(np.sign(a) == np.sign(b))
 	sign_agreement_value = sign_agreement(s4_values, this_year_values).round(2)
@@ -504,10 +504,10 @@ def seasonals_chart(tick):
 	    create_annotation(1.04, -0.22, f"Trailing 5 Rank: {trailing_5_rank}", text_color(trailing_5_rank, reverse=True)),
 	]
 	annotations.append(
-		create_annotation(0.98, 1.08, f"Correlation: {correlation_coefficient}", 'white')
+		create_annotation(1.0, 1.08, f"CC: {correlation_coefficient}", 'white')
 	)
 	annotations.append(
-		create_annotation(0.9, 1.08, f"Sign Agreement: {sign_agreement_value}", 'white')
+		create_annotation(0.88, 1.08, f"Sign Agreement: {sign_agreement_value}", 'white')
 	)
 	fig.update_layout(
 	    title=f"Mean return path for {ticker2} in years {start}-present",
