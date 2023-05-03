@@ -454,7 +454,7 @@ def seasonals_chart(tick):
 	s4_values = s4.values[:length]
 	this_year_values = days2['this_yr'][:length]
 	this_year_values = np.where(np.isnan(this_year_values), np.nanmean(this_year_values), this_year_values)
-	this_year_values = this_year_values.to_numpy()
+	this_year_values = this_year_values.values
 
 	if np.isnan(s4_values).any() or np.isnan(this_year_values).any() or np.var(s4_values) == 0 or np.var(this_year_values) == 0:
 	    r_squared = 'N/A'
