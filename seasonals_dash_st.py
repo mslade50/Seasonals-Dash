@@ -470,11 +470,10 @@ def seasonals_chart(tick):
 	window_size = 14
 
 	for i in range(len(s4_values) - window_size + 1):
-	    window_s4 = s4_values[i : i + window_size]
-	    window_this_year = this_year_values[i : i + window_size]
-
-	    if np.isnan(window_s4).any() or np.isnan(window_this_year).any() or np.var(window_s4) == 0 or np.var(window_this_year) == 0:
-		correlations.append(np.nan)
+		window_s4 = s4_values[i : i + window_size]
+		window_this_year = this_year_values[i : i + window_size]
+		if np.isnan(window_s4).any() or np.isnan(window_this_year).any() or np.var(window_s4) == 0 or np.var(window_this_year) == 0:
+			correlations.append(np.nan)
 		else:
 			correlation_matrix = np.corrcoef(window_s4, window_this_year)
 			correlation_coefficient = correlation_matrix[0, 1]
