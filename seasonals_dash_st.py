@@ -467,7 +467,7 @@ def seasonals_chart(tick):
 	    return np.mean(np.sign(a_changes) == np.sign(b_changes))
 
 	correlations = []
-	window_size = 14
+	window_size = 5
 
 	for i in range(len(s4_values) - window_size + 1):
 		window_s4 = s4_values[i : i + window_size]
