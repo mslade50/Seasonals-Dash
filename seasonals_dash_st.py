@@ -501,7 +501,7 @@ def seasonals_chart(tick):
 	    create_annotation(1.04, -0.22, f"Trailing 5 Rank: {trailing_5_rank}", text_color(trailing_5_rank, reverse=True)),
 	]
 	annotations.append(
-	    create_annotation(0.98, 1.08, f"R-squared: {r_squared:.3f}", 'white')
+	    create_annotation(0.98, 1.08, f"R-squared: {r_squared}", 'white'))
 	)
 	fig.update_layout(
 	    title=f"Mean return path for {ticker2} in years {start}-present",
