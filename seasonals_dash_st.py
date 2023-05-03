@@ -445,51 +445,13 @@ def seasonals_chart(tick):
 	    fig.add_trace(go.Scatter(x=days2.index, y=days2['this_yr'], mode='lines', name='Year to Date', line=dict(color='green')))
 
 	y1 = max(s4.max(), days2['this_yr'].max()) if plot_ytd == 'Yes' else s4.max()
-	y0=min(s4.min(),days2['this_yr'].min(),0)
-	# Assuming 'length' variable is defined and within the range of the x-axis
+	y0 = min(s4.min(), days2['this_yr'].min(), 0)
 	length_value = length
 
-	# Interpolate Y value at the specified X coordinate
 	y_value_at_length = np.interp(length_value, s4.index, s4.values)
+
 	correlation_matrix = np.corrcoef(s4.index[:length], days2['this_yr'][:length])
 	r_squared = correlation_matrix[0, 1] ** 2
-
-	annotations.append(
-	    create_annotation(0.98, 1.08, f"R-squared: {r_squared:.3f}", 'white')
-	)
-
-	# Add a white dot at the specified X coordinate and the interpolated Y value
-	fig.add_trace(go.Scatter(x=[length_value], y=[y_value_at_length], mode='markers', marker=dict(color='white', size=8), name='White Dot' ,showlegend=False))
-	def text_color(value, reverse=False):
-	    if not reverse:
-	        if value >= 85:
-	            return 'green'
-	        elif value <= 15:
-	            return 'red'
-	        else:
-	            return 'white'
-	    else:
-	        if value >= 85:
-	            return 'red'
-	        elif value <= 15:
-	            return 'green'
-	        else:
-	            return 'white'
-	def create_annotation(x, y, text, color):
-	    return dict(
-		x=x,
-		y=y,
-		xref='paper',
-		yref='paper',
-		text=text,
-		showarrow=False,
-		font=dict(size=12, color=color),
-		bgcolor='rgba(0, 0, 0, 0.5)',
-		bordercolor='grey',
-		borderwidth=1,
-		borderpad=4,
-		align='left'
-	    )
 
 	annotations = [
 	    create_annotation(0.4, -0.22, f"Cycle Avg: {cycle_avg}", text_color(cycle_avg)),
@@ -497,6 +459,13 @@ def seasonals_chart(tick):
 	    create_annotation(0.85, -0.22, f"Trailing 21 Rank: {trailing_21_rank}", text_color(trailing_21_rank, reverse=True)),
 	    create_annotation(1.04, -0.22, f"Trailing 5 Rank: {trailing_5_rank}", text_color(trailing_5_rank, reverse=True)),
 	]
+
+	annotations.append(
+	    create_annotation(0.98, 1.08, f"R-squared: {r_squared:.3f}", 'white')
+	)
+
+	fig.add_trace(go.Scatter(x=[length_value], y=[y_value_at_length], mode='markers', marker=dict(color='white', size=8), name='White Dot', showlegend=False))
+
 	fig.update_layout(
 	    title=f"Mean return path for {ticker2} in years {start}-present",
 	    legend=dict(
@@ -514,11 +483,11 @@ def seasonals_chart(tick):
 	    xaxis=dict(title='', color='white',showgrid=False),
 	    yaxis=dict(title='Mean Return', color='white',showgrid=False),
 	    font=dict(color='white'),
-	    margin=dict(l=40, r=40, t=40, b=70),  # Increase bottom margin
+	    margin=dict(l=40, r=40, t=40, b=70),
 	    hovermode='x',
 	    plot_bgcolor='Black',
 	    paper_bgcolor='Black',
-	    annotations=annotations  # Use the new annotations list with colored text
+	    annotations=annotations
 	)
 	st.plotly_chart(fig)
 
