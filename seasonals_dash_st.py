@@ -438,6 +438,37 @@ def seasonals_chart(tick):
 	s3=dfy1.cumsum()
 	##Mean Return paths chart (looks like a classic 'seasonality' chart)
 	# plot2=plt.figure(2)
+	def text_color(value, reverse=False):
+	    if not reverse:
+		if value >= 85:
+		    return 'green'
+		elif value <= 15:
+		    return 'red'
+		else:
+		    return 'white'
+	    else:
+		if value >= 85:
+		    return 'red'
+		elif value <= 15:
+		    return 'green'
+		else:
+		    return 'white'
+
+	def create_annotation(x, y, text, color):
+	    return dict(
+		x=x,
+		y=y,
+		xref='paper',
+		yref='paper',
+		text=text,
+		showarrow=False,
+		font=dict(size=12, color=color),
+		bgcolor='rgba(0, 0, 0, 0.5)',
+		bordercolor='grey',
+		borderwidth=1,
+		borderpad=4,
+		align='left'
+	    )
 	fig = go.Figure()
 
 	fig.add_trace(go.Scatter(x=s4.index, y=s4.values, mode='lines', name=cycle_label, line=dict(color='orange')))
