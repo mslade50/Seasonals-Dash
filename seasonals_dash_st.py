@@ -463,7 +463,7 @@ def seasonals_chart(tick):
 	    correlation_coefficient = f"{correlation_coefficient:.3f}"
 	def sign_agreement(a, b):
 		return np.mean(np.sign(a) == np.sign(b))
-	sign_agreement_value = sign_agreement(s4_values, this_year_values)
+	sign_agreement_value = sign_agreement(s4_values, this_year_values).round(2)
 	# Add a white dot at the specified X coordinate and the interpolated Y value
 	fig.add_trace(go.Scatter(x=[length_value], y=[y_value_at_length], mode='markers', marker=dict(color='white', size=8), name='White Dot' ,showlegend=False))
 	def text_color(value, reverse=False):
@@ -507,7 +507,7 @@ def seasonals_chart(tick):
 		create_annotation(0.98, 1.08, f"Correlation: {correlation_coefficient}", 'white')
 	)
 	annotations.append(
-		create_annotation(0.98, 1.0, f"Sign Agreement: {sign_agreement_value}", 'white')
+		create_annotation(0.9, 1.08, f"Sign Agreement: {sign_agreement_value}", 'white')
 	)
 	fig.update_layout(
 	    title=f"Mean return path for {ticker2} in years {start}-present",
