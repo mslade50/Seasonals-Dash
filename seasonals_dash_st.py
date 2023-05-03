@@ -463,7 +463,13 @@ def seasonals_chart(tick):
 	    correlation_coefficient = f"{correlation_coefficient:.2f}"
 	def sign_agreement(a, b):
 		return np.mean(np.sign(a) == np.sign(b))
-	sign_agreement_value = sign_agreement(s4_values, this_year_values).round(2)
+
+	# Calculate daily changes for both series
+	s4_daily_changes = np.diff(s4_values)
+	this_year_daily_changes = np.diff(this_year_values)
+	# Calculate sign agreement between daily changes
+	sign_agreement_value = sign_agreement(s4_daily_changes, this_year_daily_changes)
+	
 	# Add a white dot at the specified X coordinate and the interpolated Y value
 	fig.add_trace(go.Scatter(x=[length_value], y=[y_value_at_length], mode='markers', marker=dict(color='white', size=8), name='White Dot' ,showlegend=False))
 	def text_color(value, reverse=False):
