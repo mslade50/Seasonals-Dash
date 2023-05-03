@@ -451,16 +451,16 @@ def seasonals_chart(tick):
 
 	# Interpolate Y value at the specified X coordinate
 	y_value_at_length = np.interp(length_value, s4.index, s4.values)
-	s4_values = s4.values[:length]  
+	s4_values = s4.values[:length]
 	this_year_values = days2['this_yr'][:length]
 	this_year_values = np.where(np.isnan(this_year_values), np.nanmean(this_year_values), this_year_values)
-	
+
 	if np.isnan(s4_values).any() or np.isnan(this_year_values).any() or np.var(s4_values) == 0 or np.var(this_year_values) == 0:
-	    r_squared = 'N/A'
+	    correlation_coefficient = 'N/A'
 	else:
 	    correlation_matrix = np.corrcoef(s4_values, this_year_values)
-	    r_squared = correlation_matrix[0, 1] ** 2
-	    r_squared = f"{r_squared:.3f}"
+	    correlation_coefficient = correlation_matrix[0, 1]
+	    correlation_coefficient = f"{correlation_coefficient:.3f}"
 	# Add a white dot at the specified X coordinate and the interpolated Y value
 	fig.add_trace(go.Scatter(x=[length_value], y=[y_value_at_length], mode='markers', marker=dict(color='white', size=8), name='White Dot' ,showlegend=False))
 	def text_color(value, reverse=False):
@@ -501,7 +501,7 @@ def seasonals_chart(tick):
 	    create_annotation(1.04, -0.22, f"Trailing 5 Rank: {trailing_5_rank}", text_color(trailing_5_rank, reverse=True)),
 	]
 	annotations.append(
-	    create_annotation(0.98, 1.08, f"R-squared: {r_squared}", 'white')
+		create_annotation(0.98, 1.08, f"Correlation Coefficient: {correlation_coefficient}", 'white')
 	)
 	fig.update_layout(
 	    title=f"Mean return path for {ticker2} in years {start}-present",
@@ -528,7 +528,7 @@ def seasonals_chart(tick):
 	)
 	st.plotly_chart(fig)
 
-positions=['^GSPC','SPY']
+positions=['^GSPC','SPY','MLCO']
 positions.sort()
 for stock in positions:
 	seasonals_chart(stock)
