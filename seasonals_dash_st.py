@@ -530,7 +530,7 @@ def seasonals_chart(tick):
 	    create_annotation(
 		1.02,
 		1.10,
-		f"Concordance 1,5,10,21: {sign_agreement_1d}, {sign_agreement_5d}, {sign_agreement_10d}, {sign_agreement_21d}",
+		f"Concordance 5d,21d: {sign_agreement_5d}, {sign_agreement_21d}",
 		'white'
 	    )
 	)
