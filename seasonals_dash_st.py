@@ -9,17 +9,17 @@ import pandas as pd
 import streamlit as st
 import plotly.graph_objs as go
 
-positions=['spy','tlt','ZW=F']
+positions=['de','tlt','ZW=F']
 def seasonals_chart(tick):
 	ticker=tick
-	cycle_start=1951
+	cycle_start=1950
 	cycle_label='Midterms'
 	cycle_var='pre_election'
 	adjust=0
 	plot_ytd="Yes"
 	all_=""
-	end_date=dt.datetime(2022,12,30)
-	this_yr_end=dt.datetime(2023,5,9)
+	end_date=dt.datetime(2021,12,30)
+	this_yr_end=dt.datetime(2022,4,22)
 
 
 	spx1=yf.Ticker(ticker)
