@@ -9,7 +9,7 @@ import pandas as pd
 import streamlit as st
 import plotly.graph_objs as go
 
-positions=['spy','tlt']
+positions=['spy','tlt','ZW=F']
 def seasonals_chart(tick):
 	ticker=tick
 	cycle_start=1951
