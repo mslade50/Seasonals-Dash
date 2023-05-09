@@ -12,7 +12,7 @@ import plotly.graph_objs as go
 positions=['jks','tlt','ZW=F']
 def seasonals_chart(tick):
 	ticker=tick
-	cycle_start=1950
+	cycle_start=1951
 	cycle_label='Midterms'
 	cycle_var='pre_election'
 	adjust=0
