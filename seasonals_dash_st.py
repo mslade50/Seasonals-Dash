@@ -18,8 +18,8 @@ def seasonals_chart(tick):
 	adjust=0
 	plot_ytd="Yes"
 	all_=""
-	end_date=dt.datetime(2021,12,30)
-	this_yr_end=dt.datetime(2022,7,8)
+	end_date=dt.datetime(2022,12,30)
+	this_yr_end=dt.datetime(2023,5,10)
 
 
 	spx1=yf.Ticker(ticker)
