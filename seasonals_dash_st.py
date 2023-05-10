@@ -8,6 +8,7 @@ import yfinance as yf
 import pandas as pd
 import streamlit as st
 import plotly.graph_objs as go
+from plotly.subplots import make_subplots
 from ta.momentum import RSIIndicator
 
 positions=['jks','tlt','ZW=F']
@@ -447,7 +448,6 @@ def seasonals_chart(tick):
 	fig.add_trace(go.Scatter(x=s4.index, y=s4.values, mode='lines', name=cycle_label, line=dict(color='orange')))
 	if plot_ytd == 'Yes':
 	    fig.add_trace(go.Scatter(x=days2.index, y=days2['this_yr'], mode='lines', name='Year to Date', line=dict(color='green')))
-	fig.add_trace(go.Scatter(x=s5.index, y=s5['200_MA'], mode='lines', name='200_MA', line=dict(color='blue')))
 	y1 = max(s4.max(), days2['this_yr'].max()) if plot_ytd == 'Yes' else s4.max()
 	y0=min(s4.min(),days2['this_yr'].min(),0)
 	# Assuming 'length' variable is defined and within the range of the x-axis
