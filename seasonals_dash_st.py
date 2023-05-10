@@ -24,6 +24,7 @@ def seasonals_chart(tick):
 
 	spx1=yf.Ticker(ticker)
 	spx = spx1.history(period="max",end=end_date)
+	s5= spx1.history(period="max")
 	spx_rank=spx1.history(period="max",end=this_yr_end)
 	# Calculate trailing 5-day returns
 	spx_rank['Trailing_5d_Returns'] = (spx_rank['Close'] / spx_rank['Close'].shift(5)) - 1
@@ -436,6 +437,7 @@ def seasonals_chart(tick):
 	dfy=pd.DataFrame(yr_master)
 	dfy1=dfy.mean()
 	s3=dfy1.cumsum()
+	s5['200_MA'] = s5['Close'].rolling(window=200).mean()
 	##Mean Return paths chart (looks like a classic 'seasonality' chart)
 	# plot2=plt.figure(2)
 	fig = go.Figure()
@@ -443,7 +445,7 @@ def seasonals_chart(tick):
 	fig.add_trace(go.Scatter(x=s4.index, y=s4.values, mode='lines', name=cycle_label, line=dict(color='orange')))
 	if plot_ytd == 'Yes':
 	    fig.add_trace(go.Scatter(x=days2.index, y=days2['this_yr'], mode='lines', name='Year to Date', line=dict(color='green')))
-
+	fig.add_trace(go.Scatter(x=s5.index, y=s5['200_MA'], mode='lines', name='200_MA', line=dict(color='blue')))
 	y1 = max(s4.max(), days2['this_yr'].max()) if plot_ytd == 'Yes' else s4.max()
 	y0=min(s4.min(),days2['this_yr'].min(),0)
 	# Assuming 'length' variable is defined and within the range of the x-axis
