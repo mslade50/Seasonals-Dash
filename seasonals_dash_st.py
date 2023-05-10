@@ -578,9 +578,8 @@ def seasonals_chart(tick):
 
 	# Adjust the domain of y-axes for the height ratio
 	fig2['layout']['yaxis1'].update(domain=[0.75, 1])
-	fig2['layout']['yaxis2'].update(domain=[0, 0.7])
+	fig2['layout']['yaxis2'].update(domain=[0, 0.75])
 
-	st.plotly_chart(fig2)
 	st.plotly_chart(fig)
 	st.plotly_chart(fig2)
 
