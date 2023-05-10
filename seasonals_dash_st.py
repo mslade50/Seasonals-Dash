@@ -564,8 +564,7 @@ def seasonals_chart(tick):
 	    annotations=annotations  # Use the new annotations list with colored text
 	)
 	# Create a candlestick chart
-	fig2 = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.03,
-			     subplot_titles=('RSI', 'Price and 200-day MA'))
+	fig2 = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.03)
 
 	fig2.add_trace(go.Scatter(x=df.index, y=df['RSI'], name='RSI'), row=1, col=1)
 	fig2.add_trace(go.Candlestick(x=df.index,
@@ -577,8 +576,8 @@ def seasonals_chart(tick):
 	fig2.add_trace(go.Scatter(x=df.index, y=df['200_MA'], name='200_MA', line=dict(color='purple')), row=2, col=1)
 
 	# Adjust the domain of y-axes for the height ratio
-	fig2['layout']['yaxis1'].update(domain=[0.85, 1])
-	fig2['layout']['yaxis2'].update(domain=[0, 0.85], showgrid=False)
+	fig2['layout']['yaxis1'].update(domain=[0.875, 1])
+	fig2['layout']['yaxis2'].update(domain=[0, 0.875], showgrid=False)
 
 	# Add horizontal lines at RSI=70 and RSI=30
 	fig2.update_layout(
@@ -586,9 +585,14 @@ def seasonals_chart(tick):
 		dict(type='line', yref='y1', y0=70, y1=70, xref='x', x0=df.index[0], x1=df.index[-1], line=dict(color='Red')),
 		dict(type='line', yref='y1', y0=30, y1=30, xref='x', x0=df.index[0], x1=df.index[-1], line=dict(color='Green'))
 	    ],
+	    title=ticker, # Replace ticker with your ticker variable
+	    title_x=0.5, # This will center the title
 	    height=800, 
 	    width=1200
 	)
+
+fig2.update_xaxes(showgrid=False)
+fig2.update_yaxes(showgrid=False)
 
 	st.plotly_chart(fig)
 	st.plotly_chart(fig2)
