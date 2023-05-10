@@ -591,8 +591,8 @@ def seasonals_chart(tick):
 	    width=1200
 	)
 
-fig2.update_xaxes(showgrid=False)
-fig2.update_yaxes(showgrid=False)
+	fig2.update_xaxes(showgrid=False)
+	fig2.update_yaxes(showgrid=False)
 
 	st.plotly_chart(fig)
 	st.plotly_chart(fig2)
