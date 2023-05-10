@@ -565,12 +565,9 @@ def seasonals_chart(tick):
 	)
 	# Create a candlestick chart
 	fig2 = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.03,
-			     subplot_titles=('RSI', 'Price and 200-day MA'),
-			     specs=[[{"secondary_y": False, "height": 0.2}],
-				    [{"secondary_y": True, "height": 0.8}]])
+			     subplot_titles=('RSI', 'Price and 200-day MA'))
 
 	fig2.add_trace(go.Scatter(x=df.index, y=df['RSI'], name='RSI'), row=1, col=1)
-
 	fig2.add_trace(go.Candlestick(x=df.index,
 				      open=df['Open'],
 				      high=df['High'],
@@ -579,7 +576,11 @@ def seasonals_chart(tick):
 
 	fig2.add_trace(go.Scatter(x=df.index, y=df['200_MA'], name='200_MA', line=dict(color='purple')), row=2, col=1)
 
-	fig2.update_layout(height=600, width=800, title_text=ticker)
+	# Adjust the domain of y-axes for the height ratio
+	fig2['layout']['yaxis1'].update(domain=[0.75, 1])
+	fig2['layout']['yaxis2'].update(domain=[0, 0.7])
+
+	st.plotly_chart(fig2)
 	st.plotly_chart(fig)
 	st.plotly_chart(fig2)
 
