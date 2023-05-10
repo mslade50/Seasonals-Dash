@@ -8,6 +8,7 @@ import yfinance as yf
 import pandas as pd
 import streamlit as st
 import plotly.graph_objs as go
+from ta.momentum import RSIIndicator
 
 positions=['jks','tlt','ZW=F']
 def seasonals_chart(tick):
@@ -24,7 +25,9 @@ def seasonals_chart(tick):
 
 	spx1=yf.Ticker(ticker)
 	spx = spx1.history(period="max",end=end_date)
-	s5= spx1.history(period="max")
+	df= spx1.history(period="max")
+	df['200_MA'] = df['Close'].rolling(window=200).mean()
+	df['RSI'] = RSIIndicator(df['Close']).rsi()
 	spx_rank=spx1.history(period="max",end=this_yr_end)
 	# Calculate trailing 5-day returns
 	spx_rank['Trailing_5d_Returns'] = (spx_rank['Close'] / spx_rank['Close'].shift(5)) - 1
@@ -437,7 +440,6 @@ def seasonals_chart(tick):
 	dfy=pd.DataFrame(yr_master)
 	dfy1=dfy.mean()
 	s3=dfy1.cumsum()
-	s5['200_MA'] = s5['Close'].rolling(window=200).mean()
 	##Mean Return paths chart (looks like a classic 'seasonality' chart)
 	# plot2=plt.figure(2)
 	fig = go.Figure()
@@ -560,7 +562,24 @@ def seasonals_chart(tick):
 	    paper_bgcolor='Black',
 	    annotations=annotations  # Use the new annotations list with colored text
 	)
+	# Create a candlestick chart
+	fig2 = make_subplots(rows=2, cols=1, shared_xaxes=True, 
+			    vertical_spacing=0.03, subplot_titles=('RSI', 'Price and 200-day MA'), 
+			    row_width=[0.2, 0.7])
+
+	fig2.add_trace(go.Scatter(x=df.index, y=df['RSI'], name='RSI'), row=1, col=1)
+
+	fig2.add_trace(go.Candlestick(x=df.index,
+			open=df['Open'],
+			high=df['High'],
+			low=df['Low'],
+			close=df['Close'], name='Price'), row=2, col=1)
+
+	fig2.add_trace(go.Scatter(x=df.index, y=df['200_MA'], name='200_MA', line=dict(color='purple')), row=2, col=1)
+
+	fig2.update_layout(height=600, width=800, title_text=ticker)
 	st.plotly_chart(fig)
+	st.plotly_chart(fig2)
 
 
 positions.sort()
