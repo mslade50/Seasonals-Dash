@@ -578,9 +578,17 @@ def seasonals_chart(tick):
 
 	# Adjust the domain of y-axes for the height ratio
 	fig2['layout']['yaxis1'].update(domain=[0.85, 1])
-	fig2['layout']['yaxis2'].update(domain=[0, 0.85])
+	fig2['layout']['yaxis2'].update(domain=[0, 0.85], showgrid=False)
 
-	fig2.update_layout(height=800, width=1200)
+	# Add horizontal lines at RSI=70 and RSI=30
+	fig2.update_layout(
+	    shapes=[
+		dict(type='line', yref='y1', y0=70, y1=70, xref='x', x0=df.index[0], x1=df.index[-1], line=dict(color='Red')),
+		dict(type='line', yref='y1', y0=30, y1=30, xref='x', x0=df.index[0], x1=df.index[-1], line=dict(color='Green'))
+	    ],
+	    height=800, 
+	    width=1200
+	)
 
 	st.plotly_chart(fig)
 	st.plotly_chart(fig2)
