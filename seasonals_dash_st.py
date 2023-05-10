@@ -22,7 +22,7 @@ def seasonals_chart(tick):
 	all_=""
 	end_date=dt.datetime(2022,12,30)
 	this_yr_end=dt.datetime(2023,5,10)
-	start_date=this_yr_end-timedelta(days=365)
+	start_date=this_yr_end-timedelta(days=700)
 
 
 	spx1=yf.Ticker(ticker)
