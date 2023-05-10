@@ -29,7 +29,7 @@ def seasonals_chart(tick):
 	df= spx1.history(period="max")
 	df['200_MA'] = df['Close'].rolling(window=200).mean()
 	df['RSI'] = RSIIndicator(df['Close']).rsi()
-	df = df[df.index.dayofweek < 5]
+	df.index = df.index.strftime('%Y-%m-%d')
 	df = df[-252:]
 	spx_rank=spx1.history(period="max",end=this_yr_end)
 	# Calculate trailing 5-day returns
