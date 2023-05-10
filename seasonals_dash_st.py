@@ -563,17 +563,19 @@ def seasonals_chart(tick):
 	    annotations=annotations  # Use the new annotations list with colored text
 	)
 	# Create a candlestick chart
-	fig2 = make_subplots(rows=2, cols=1, shared_xaxes=True, 
-			    vertical_spacing=0.03, subplot_titles=('RSI', 'Price and 200-day MA'), 
-			    row_width=[0.2, 0.7])
+	df= df[-252:]
+	fig2 = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.03,
+			     subplot_titles=('RSI', 'Price and 200-day MA'),
+			     specs=[[{"secondary_y": False, "height": 0.2}],
+				    [{"secondary_y": True, "height": 0.8}]])
 
 	fig2.add_trace(go.Scatter(x=df.index, y=df['RSI'], name='RSI'), row=1, col=1)
 
 	fig2.add_trace(go.Candlestick(x=df.index,
-			open=df['Open'],
-			high=df['High'],
-			low=df['Low'],
-			close=df['Close'], name='Price'), row=2, col=1)
+				      open=df['Open'],
+				      high=df['High'],
+				      low=df['Low'],
+				      close=df['Close'], name='Price'), row=2, col=1)
 
 	fig2.add_trace(go.Scatter(x=df.index, y=df['200_MA'], name='200_MA', line=dict(color='purple')), row=2, col=1)
 
