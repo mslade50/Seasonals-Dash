@@ -577,8 +577,10 @@ def seasonals_chart(tick):
 	fig2.add_trace(go.Scatter(x=df.index, y=df['200_MA'], name='200_MA', line=dict(color='purple')), row=2, col=1)
 
 	# Adjust the domain of y-axes for the height ratio
-	fig2['layout']['yaxis1'].update(domain=[0.75, 1])
-	fig2['layout']['yaxis2'].update(domain=[0, 0.75])
+	fig2['layout']['yaxis1'].update(domain=[0.85, 1])
+	fig2['layout']['yaxis2'].update(domain=[0, 0.85])
+
+	fig2.update_layout(height=800, width=1200)
 
 	st.plotly_chart(fig)
 	st.plotly_chart(fig2)
