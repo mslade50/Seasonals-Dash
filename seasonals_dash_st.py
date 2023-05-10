@@ -29,6 +29,7 @@ def seasonals_chart(tick):
 	df= spx1.history(period="max")
 	df['200_MA'] = df['Close'].rolling(window=200).mean()
 	df['RSI'] = RSIIndicator(df['Close']).rsi()
+	df = df[-252:]
 	spx_rank=spx1.history(period="max",end=this_yr_end)
 	# Calculate trailing 5-day returns
 	spx_rank['Trailing_5d_Returns'] = (spx_rank['Close'] / spx_rank['Close'].shift(5)) - 1
@@ -563,7 +564,6 @@ def seasonals_chart(tick):
 	    annotations=annotations  # Use the new annotations list with colored text
 	)
 	# Create a candlestick chart
-	df= df[-252:]
 	fig2 = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.03,
 			     subplot_titles=('RSI', 'Price and 200-day MA'),
 			     specs=[[{"secondary_y": False, "height": 0.2}],
