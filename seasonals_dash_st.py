@@ -29,7 +29,7 @@ def seasonals_chart(tick):
 	df= spx1.history(period="max")
 	df['200_MA'] = df['Close'].rolling(window=200).mean()
 	df['RSI'] = RSIIndicator(df['Close']).rsi()
-	df.index = df.index.strftime('%Y-%m-%d')
+	dates = df.index.strftime('%Y-%m-%d').tolist()
 	df = df[-252:]
 	spx_rank=spx1.history(period="max",end=this_yr_end)
 	# Calculate trailing 5-day returns
@@ -568,13 +568,13 @@ def seasonals_chart(tick):
 	fig2 = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.03)
 
 	fig2.add_trace(go.Scatter(x=df.index, y=df['RSI'], name='RSI'), row=1, col=1)
-	fig2.add_trace(go.Candlestick(x=df.index,
+	fig2.add_trace(go.Candlestick(x=dates,
 				      open=df['Open'],
 				      high=df['High'],
 				      low=df['Low'],
 				      close=df['Close'], name='Price'), row=2, col=1)
 
-	fig2.add_trace(go.Scatter(x=df.index, y=df['200_MA'], name='200_MA', line=dict(color='purple')), row=2, col=1)
+	fig2.add_trace(go.Scatter(x=dates, y=df['200_MA'], name='200_MA', line=dict(color='purple')), row=2, col=1)
 
 	# Adjust the domain of y-axes for the height ratio
 	fig2['layout']['yaxis1'].update(domain=[0.875, 1])
