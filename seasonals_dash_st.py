@@ -574,7 +574,7 @@ def seasonals_chart(tick):
 				      low=df['Low'],
 				      close=df['Close'], name='Price'), row=2, col=1)
 
-	fig2.add_trace(go.Scatter(x=df['date_str', y=df['200_MA'], name='200_MA', line=dict(color='purple')), row=2, col=1)
+	fig2.add_trace(go.Scatter(x=df['date_str'], y=df['200_MA'], name='200_MA', line=dict(color='purple')), row=2, col=1)
 
 	# Adjust the domain of y-axes for the height ratio
 	fig2['layout']['yaxis1'].update(domain=[0.875, 1])
