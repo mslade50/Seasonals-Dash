@@ -3,6 +3,7 @@ import numpy as np
 import datetime as dt
 from datetime import date
 from datetime import timedelta
+import requests
 import os
 import yfinance as yf
 import pandas as pd
@@ -10,8 +11,8 @@ import streamlit as st
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 from ta.momentum import RSIIndicator
-
-positions=['AAPL']
+megas_list=['EURCHF=X']
+st.title("Commodities")
 def seasonals_chart(tick):
 	ticker=tick
 	cycle_start=1951
@@ -21,12 +22,12 @@ def seasonals_chart(tick):
 	plot_ytd="Yes"
 	all_=""
 	end_date=dt.datetime(2022,12,30)
-	this_yr_end=dt.datetime(2023,5,17)
+	this_yr_end=dt.date.today()
 
 
 	spx1=yf.Ticker(ticker)
 	spx = spx1.history(period="max",end=end_date)
-	df= spx1.history(period="max",end=this_yr_end)
+	df= spx1.history(period="max")
 	df['200_MA'] = df['Close'].rolling(window=200).mean()
 	df['RSI'] = RSIIndicator(df['Close']).rsi()
 	df = df[-252:]
@@ -445,7 +446,16 @@ def seasonals_chart(tick):
 	dfy1=dfy.mean()
 	s3=dfy1.cumsum()
 	##Mean Return paths chart (looks like a classic 'seasonality' chart)
-	# plot2=plt.figure(2)
+
+	# Assuming df is your DataFrame and it has 'Close' column
+	df['max_rolling'] = df['Close'].rolling(window=41).max().shift(-20)
+	df['min_rolling'] = df['Close'].rolling(window=41).min().shift(-20)
+
+	df['pivot_point'] = np.where((df['Close'] == df['max_rolling']) | (df['Close'] == df['min_rolling']), df['Close'], np.nan)
+
+	# Get pivot points for the last 252 days
+	pivot_points_last_252 = df[df['pivot_point'].notna()].tail(252)
+
 	fig = go.Figure()
 
 	fig.add_trace(go.Scatter(x=s4.index, y=s4.values, mode='lines', name=cycle_label, line=dict(color='orange')))
@@ -566,32 +576,32 @@ def seasonals_chart(tick):
 	    annotations=annotations  # Use the new annotations list with colored text
 	)
 	# Create a candlestick chart
-	fig2 = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.03)
+	fig2 = go.Figure()
 
-	fig2.add_trace(go.Scatter(x=df.index, y=df['RSI'], name='RSI'), row=1, col=1)
+	# Add only the Price (Candlestick) trace and the 200_MA trace
 	fig2.add_trace(go.Candlestick(x=df['date_str'],
-				      open=df['Open'],
-				      high=df['High'],
-				      low=df['Low'],
-				      close=df['Close'], name='Price'), row=2, col=1)
+				     open=df['Open'],
+				     high=df['High'],
+				     low=df['Low'],
+				     close=df['Close'], name='Price'))
 
-	fig2.add_trace(go.Scatter(x=df['date_str'], y=df['200_MA'], name='200_MA', line=dict(color='purple')), row=2, col=1)
+	fig2.add_trace(go.Scatter(x=df['date_str'], y=df['200_MA'], name='200_MA', line=dict(color='purple')))
 
-	# Adjust the domain of y-axes for the height ratio
-	fig2['layout']['yaxis1'].update(domain=[0.875, 1])
-	fig2['layout']['yaxis2'].update(domain=[0, 0.875], showgrid=False)
+	# Add pivot point rays
+	for _, row in pivot_points_last_252.iterrows():
+	    fig2.add_shape(type='line',
+			  x0=row['date_str'], y0=row['pivot_point'], x1=df['date_str'].iloc[-1], y1=row['pivot_point'],
+			  xref='x', yref='y',
+			  line=dict(color='Orange', width=1))
 
-	# Add horizontal lines at RSI=70 and RSI=30
-	fig2.update_layout(
-	    shapes=[
-		dict(type='line', yref='y1', y0=70, y1=70, xref='x', x0=df.index[0], x1=df.index[-1], line=dict(color='Red')),
-		dict(type='line', yref='y1', y0=30, y1=30, xref='x', x0=df.index[0], x1=df.index[-1], line=dict(color='Green'))
-	    ],
-	    title=ticker, # Replace ticker with your ticker variable
-	    title_x=0.5, # This will center the title
-	    height=800, 
-	    width=1200
-	)
+	# Finalize layout
+	fig2.update_layout(height=800,
+			  width=1200,
+			  xaxis=dict(
+			      rangeslider=dict(
+				  visible=False
+			      )
+			  ))
 
 	fig2.update_xaxes(showgrid=False)
 	fig2.update_yaxes(showgrid=False)
@@ -600,6 +610,5 @@ def seasonals_chart(tick):
 	st.plotly_chart(fig2)
 
 
-positions.sort()
-for stock in positions:
+for stock in megas_list:
 	seasonals_chart(stock)
