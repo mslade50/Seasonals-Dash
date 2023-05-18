@@ -11,7 +11,7 @@ import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 from ta.momentum import RSIIndicator
 
-positions=['EURCHF=X']
+positions=['AAPL']
 def seasonals_chart(tick):
 	ticker=tick
 	cycle_start=1951
@@ -21,7 +21,7 @@ def seasonals_chart(tick):
 	plot_ytd="Yes"
 	all_=""
 	end_date=dt.datetime(2022,12,30)
-	this_yr_end=dt.datetime(2023,5,10)
+	this_yr_end=dt.datetime(2023,5,17)
 
 
 	spx1=yf.Ticker(ticker)
